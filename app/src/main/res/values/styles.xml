@@ -8,4 +8,48 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="movies_list_title" parent="base_text_view">
+        <item name="android:textSize">@dimen/movies_list_title_font_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="movies_list_title_popular" parent="movies_list_title">
+        <item name="android:textSize">@dimen/movies_list_title_popular_font_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:padding">@dimen/movies_list_title_popular_padding</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/rounded_corners_light_gray_background</item>
+    </style>
+
+    <style name="movies_list_description" parent="base_text_view">
+        <item name="android:textSize">@dimen/movies_list_description_font_size</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="base_card_view" parent="CardView">
+        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
+        <item name="cardElevation">@dimen/card_elevation</item>
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
+    <style name="base_text_view">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="movies_detail_rating" parent="base_text_view">
+        <item name="android:textSize">@dimen/movies_detail_rating_font_size</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="movies_detail_release_date" parent="base_text_view">
+        <item name="android:textSize">@dimen/movies_detail_release_date_font_size</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="movies_detail_description" parent="base_text_view">
+        <item name="android:textSize">@dimen/movies_detail_description_font_size</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
 </resources>
