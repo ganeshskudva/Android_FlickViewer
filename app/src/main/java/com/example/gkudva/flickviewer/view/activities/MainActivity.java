@@ -8,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.example.gkudva.flickviewer.R;
@@ -25,6 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
+import icepick.Icepick;
 
 public class MainActivity extends AppCompatActivity implements MainMvpView,SwipeRefreshLayout.OnRefreshListener {
 
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements MainMvpView,Swipe
     private ACProgressFlower mLoadingDialog;
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private static final String TAG_LOG = "MainActivity";
+    private int orientation;
 
     @BindView(R.id.rvFlicks) RecyclerView flicksRecycleView;
     @BindView(R.id.swiperefresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -51,16 +52,17 @@ public class MainActivity extends AppCompatActivity implements MainMvpView,Swipe
 
         infoMessage = new InfoMessage(this);
 
-
+        orientation = getResources().getConfiguration().orientation;
         setupRecyclerView(flicksRecycleView);
 
         swipeRefreshLayout.setOnRefreshListener(this);
+        Icepick.restoreInstanceState(this, savedInstanceState);
         presenter.loadFlicks();
     }
 
     public void showLoadingDialog()
     {
-        if (mLoadingDialog == null && !mLoadingDialog.isShowing())
+        if (mLoadingDialog == null )
         {
             mLoadingDialog = new ACProgressFlower.Builder(this)
                     .direction(ACProgressConstant.DIRECT_CLOCKWISE)
@@ -68,7 +70,9 @@ public class MainActivity extends AppCompatActivity implements MainMvpView,Swipe
                     .text(getResources().getString(R.string.loading))
                     .fadeColor(Color.DKGRAY).build();
         }
-        mLoadingDialog.show();
+
+        if (!mLoadingDialog.isShowing())
+            mLoadingDialog.show();
     }
 
     public void hideLoadingDialog()
@@ -106,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements MainMvpView,Swipe
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-        FlickAdapter adapter = new FlickAdapter(this);
+        FlickAdapter adapter = new FlickAdapter(this, this.orientation);
         adapter.setCallback(new FlickAdapter.CallbackListener() {
             @Override
             public void onItemClick(Flick flick) {
@@ -120,12 +124,11 @@ public class MainActivity extends AppCompatActivity implements MainMvpView,Swipe
         endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-                Log.d(TAG_LOG, "page: " + page);
                 presenter.loadFlicks();
             }
         };
+
+        recyclerView.addOnScrollListener(endlessRecyclerViewScrollListener);
     }
 
     @Override
@@ -137,8 +140,12 @@ public class MainActivity extends AppCompatActivity implements MainMvpView,Swipe
 
     @Override
     public void showProgressIndicator() {
-        hideLoadingDialog();
-        flicksRecycleView.setVisibility(View.INVISIBLE);
+        showLoadingDialog();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
     }
 }
-

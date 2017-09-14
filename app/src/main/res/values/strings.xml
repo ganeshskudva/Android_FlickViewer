@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Flickster</string>
+    <string name="app_name">FlickInfoViewer</string>
     <string name="loading">Loading &#8230;</string>
 </resources>

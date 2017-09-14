@@ -1,6 +1,7 @@
 package com.example.gkudva.flickviewer.view.adapter;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.support.annotation.Nullable;
@@ -41,13 +42,15 @@ public class FlickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private Context mContext;
     private CallbackListener callback;
     private static final String TAG_LOG = "FlickAdapter";
+    private int orientation;
 
     public FlickAdapter() {
         this.mFlicks = Collections.emptyList();
     }
 
-    public FlickAdapter(Context mContext) {
+    public FlickAdapter(Context mContext, int orientation) {
         this.mContext = mContext;
+        this.orientation = orientation;
         this.mFlicks = Collections.emptyList();
     }
 
@@ -82,8 +85,7 @@ public class FlickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         @BindView(R.id.ivPoster)ImageView posterImageView;
-        @BindView(R.id.tvName)
-        TextView nameTextView;
+        @BindView(R.id.tvName) TextView nameTextView;
         @BindView(R.id.tvDesc) TextView descTextView;
 
         // We also create a constructor that accepts the entire item row
@@ -99,11 +101,21 @@ public class FlickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view;
         if (viewType == RowType.POPULAR.ordinal()) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_flick_popular, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_flick_popular, parent, false);
             return new PopularMovieViewHolder(view);
         } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_flick_regular, parent, false);
+            switch (orientation) {
+                case Configuration.ORIENTATION_LANDSCAPE:
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_flick_regular_land, parent, false);
+                    break;
+                case Configuration.ORIENTATION_PORTRAIT:
+                default:
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_flick_regular_port, parent, false);
+                    break;
+
+            }
             return new MovieViewHolder(view);
         }
     }
@@ -320,4 +332,3 @@ public class FlickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
 
 }
-

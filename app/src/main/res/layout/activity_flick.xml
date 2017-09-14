@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.gkudva.flickster.view.activities.FlickActivity">
+
+    <ImageView
+        android:id="@+id/iv_poster"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.2"
+        tools:ignore="ContentDescription" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+            <ImageView
+                android:id="@+id/iv_backdrop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="ContentDescription" />
+
+            <android.support.v7.widget.AppCompatRatingBar
+                android:id="@+id/rating_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:isIndicator="true"
+                android:max="5"
+                android:stepSize="0.01" />
+
+            <TextView
+                android:id="@+id/tv_vote_count"
+                style="@style/movies_detail_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/tv_release_date"
+                style="@style/movies_detail_release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/activity_vertical_margin_half"
+                android:layout_marginTop="@dimen/movies_list_vertical_margin" />
+
+            <TextView
+                android:id="@+id/tv_description"
+                style="@style/movies_detail_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
