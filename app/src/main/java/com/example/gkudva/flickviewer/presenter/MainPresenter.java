@@ -27,7 +27,7 @@ public class MainPresenter implements Presenter<MainMvpView> {
     private FlickService flickService;
     private static final String TAG = "MainPresenter";
     private Response response;
-    private static int pageNum = 1;
+    private static int pageNum = 0;
 
     @Override
     public void attachView(MainMvpView view) {
@@ -36,49 +36,54 @@ public class MainPresenter implements Presenter<MainMvpView> {
 
     @Override
     public void detachView() {
+        pageNum = 0;
         this.mainMvpView = null;
         if (subscription != null) subscription.unsubscribe();
     }
 
     public void loadFlicks()
     {
+        pageNum++;
         mainMvpView.showProgressIndicator();
         if (subscription != null) subscription.unsubscribe();
 
         if (flickService == null)
             flickService = FlickService.Factory.create();
 
-        subscription = flickService.getResponse()
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.newThread())
-                        .subscribe(new Subscriber<Response>() {
-                            @Override
-                            public void onCompleted() {
-                                Log.i(TAG, "Flicks loaded " + response);
-                                    if (!flickList.isEmpty()) {
-                                        mainMvpView.showFLicks(flickList);
-                                    } else {
-                                        mainMvpView.showMessage("No Flicks found");
-                                    }
+        subscription = flickService.getResponse(Integer.toString(pageNum))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new Subscriber<Response>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.i(TAG, "Flicks loaded " + response);
+                        if (!flickList.isEmpty()) {
+                            mainMvpView.showFLicks(flickList);
+                        } else {
+                            mainMvpView.showMessage("No Flicks found");
+                        }
 
 
-                            }
+                    }
 
-                            @Override
-                            public void onError(Throwable error) {
-                                Log.e(TAG, "Error loading flicks ", error);
-                                if (isHttp404(error)) {
-                                    mainMvpView.showMessage("HTTP Error");
-                                } else {
-                                    mainMvpView.showMessage(error.getMessage());
-                                }
-                            }
+                    @Override
+                    public void onError(Throwable error) {
+                        Log.e(TAG, "Error loading flicks ", error);
+                        if (isHttp404(error)) {
+                            mainMvpView.showMessage("HTTP Error");
+                        } else {
+                            mainMvpView.showMessage(error.getMessage());
+                        }
+                    }
 
-                            @Override
-                            public void onNext(Response response) {
-                                MainPresenter.this.flickList = response.getFlicks();
-                            }
-                        });
+                    @Override
+                    public void onNext(Response response) {
+                        if (flickList == null)
+                            MainPresenter.this.flickList = response.getFlicks();
+                        else
+                            MainPresenter.this.flickList.addAll(response.getFlicks());
+                    }
+                });
     }
 
     private static boolean isHttp404(Throwable error) {
