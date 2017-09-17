@@ -28,7 +28,7 @@ The following **bonus** features are implemented:
     * [x] Less popular videos rely on the detail page should show ratings and a YouTube preview.
 * [x] Apply the popular [Butterknife annotation library](http://guides.codepath.com/android/Reducing-View-Boilerplate-with-Butterknife) to reduce boilerplate code.
 * [x] Apply rounded corners for the poster or background images using [Picasso transformations](https://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#other-transformations)
-* [ ] Replaced android-async-http network client with the popular [Retrofit](https://github.com/square/retrofit) networking libraries.
+* [x] Replaced android-async-http network client with the popular [Retrofit](https://github.com/square/retrofit) networking libraries.
 
 The following **additional** features are implemented:
 * [x] Implemented infinite scroll in recycler view
