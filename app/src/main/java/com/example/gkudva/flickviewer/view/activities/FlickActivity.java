@@ -154,7 +154,10 @@ public class FlickActivity extends AppCompatActivity implements FlickMvpView {
     @Override
     public void showMovieData() {
         tvDescription.setText(movie.getOverview());
-        tvVoteCount.setText(Integer.toString(movie.getVoteCount()));
+        if (movie.getAdult())
+            tvVoteCount.setText("R");
+        else
+            tvVoteCount.setText("PG");
         tvReleaseDate.setText(movie.getReleaseDate());
 
         try {
